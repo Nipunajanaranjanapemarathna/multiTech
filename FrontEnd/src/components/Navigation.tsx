@@ -1,31 +1,47 @@
-import React, { useState } from 'react';
-import { Home, User, Leaf, ShoppingBag, MessageSquare, Mail, Settings } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Home,
+  User,
+  Leaf,
+  ShoppingBag,
+  MessageSquare,
+  Mail,
+  Settings,
+} from "lucide-react";
 
 interface NavigationProps {
   onNavigate: (section: string) => void;
   activeSection: string;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) => {
+const Navigation: React.FC<NavigationProps> = ({
+  onNavigate,
+  activeSection,
+}) => {
   const [isWheelMode, setIsWheelMode] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const navItems = [
-    { id: 'hero', icon: Home, label: 'Home', color: '#B7FF8F' },
-    { id: 'about', icon: User, label: 'About', color: '#EFC62D' },
-    { id: 'ingredients', icon: Leaf, label: 'Ingredients', color: '#B7FF8F' },
-    { id: 'shop', icon: ShoppingBag, label: 'Shop', color: '#EFC62D' },
-    { id: 'testimonials', icon: MessageSquare, label: 'Reviews', color: '#B7FF8F' },
-    { id: 'contact', icon: Mail, label: 'Contact', color: '#EFC62D' }
+    { id: "hero", icon: Home, label: "Home", color: "#B7FF8F" },
+    { id: "about", icon: User, label: "About", color: "#EFC62D" },
+    { id: "ingredients", icon: Leaf, label: "Ingredients", color: "#B7FF8F" },
+    { id: "shop", icon: ShoppingBag, label: "Shop", color: "#EFC62D" },
+    {
+      id: "testimonials",
+      icon: MessageSquare,
+      label: "Reviews",
+      color: "#B7FF8F",
+    },
+    { id: "contact", icon: Mail, label: "Contact", color: "#EFC62D" },
   ];
 
   const handleNavClick = (sectionId: string) => {
     // Smooth scroll animation
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
     }
     onNavigate(sectionId);
@@ -47,20 +63,24 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
           onClick={() => setIsWheelMode(!isWheelMode)}
           className="w-12 h-12 bg-gradient-to-r from-purple-400 to-blue-400 text-black rounded-full shadow-lg hover:scale-110 transition-all duration-300 flex items-center justify-center border-2 border-white/20"
         >
-          <Settings className={`w-6 h-6 transition-transform duration-500 ${isWheelMode ? 'rotate-180' : ''}`} />
+          <Settings
+            className={`w-6 h-6 transition-transform duration-500 ${
+              isWheelMode ? "rotate-180" : ""
+            }`}
+          />
         </button>
       </div>
 
       {/* Traditional Right-Side Navigation */}
       {!isWheelMode && (
-        <nav className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40">
+        <nav className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 hidden sm:block">
           <div className="backdrop-blur-lg bg-black/30 rounded-3xl p-4 border border-white/10 shadow-2xl">
             <div className="space-y-4">
               {navItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = activeSection === item.id;
                 const isHovered = hoveredItem === item.id;
-                
+
                 return (
                   <div
                     key={item.id}
@@ -71,30 +91,32 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
                     <button
                       onClick={() => handleNavClick(item.id)}
                       className={`
-                        relative w-14 h-14 rounded-2xl flex items-center justify-center
-                        transition-all duration-500 transform
-                        ${isActive 
-                          ? 'bg-gradient-to-r from-purple-400 to-blue-400 text-black scale-110 shadow-lg' 
-                          : 'bg-white/10 text-white hover:bg-white/20 hover:scale-105'
-                        }
-                        ${isHovered ? 'shadow-2xl' : ''}
-                      `}
+                  relative w-14 h-14 rounded-2xl flex items-center justify-center
+                  transition-all duration-500 transform
+                  ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-400 to-blue-400 text-black scale-110 shadow-lg"
+                      : "bg-white/10 text-white hover:bg-white/20 hover:scale-105"
+                  }
+                  ${isHovered ? "shadow-2xl" : ""}
+                `}
                       style={{
-                        boxShadow: isActive || isHovered 
-                          ? `0 0 30px ${item.color}40, 0 0 60px ${item.color}20` 
-                          : 'none',
-                        animationDelay: `${index * 100}ms`
+                        boxShadow:
+                          isActive || isHovered
+                            ? `0 0 30px ${item.color}40, 0 0 60px ${item.color}20`
+                            : "none",
+                        animationDelay: `${index * 100}ms`,
                       }}
                     >
-                      <Icon 
+                      <Icon
                         className={`w-6 h-6 transition-all duration-300 ${
-                          isActive ? 'scale-110' : ''
-                        }`} 
+                          isActive ? "scale-110" : ""
+                        }`}
                       />
-                      
+
                       {/* Ripple Effect */}
                       {isHovered && (
-                        <div 
+                        <div
                           className="absolute inset-0 rounded-2xl animate-ping opacity-30"
                           style={{ backgroundColor: item.color }}
                         />
@@ -104,23 +126,22 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
                     {/* Label Popup */}
                     <div
                       className={`
-                        absolute right-16 top-1/2 transform -translate-y-1/2
-                        px-4 py-2 bg-black/90 backdrop-blur-sm text-white text-sm font-medium
-                        rounded-xl border border-white/20 whitespace-nowrap
-                        transition-all duration-300 pointer-events-none
-                        ${isHovered 
-                          ? 'opacity-100 translate-x-0' 
-                          : 'opacity-0 translate-x-4'
-                        }
-                      `}
+                  absolute right-16 top-1/2 transform -translate-y-1/2
+                  px-4 py-2 bg-black/90 backdrop-blur-sm text-white text-sm font-medium
+                  rounded-xl border border-white/20 whitespace-nowrap
+                  transition-all duration-300 pointer-events-none
+                  ${
+                    isHovered
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 translate-x-4"
+                  }
+                `}
                       style={{
-                        boxShadow: `0 0 20px ${item.color}30`
+                        boxShadow: `0 0 20px ${item.color}30`,
                       }}
                     >
                       {item.label}
-                      <div 
-                        className="absolute left-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-l-8 border-r-0 border-t-4 border-b-4 border-l-black/90 border-t-transparent border-b-transparent"
-                      />
+                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-l-8 border-r-0 border-t-4 border-b-4 border-l-black/90 border-t-transparent border-b-transparent" />
                     </div>
                   </div>
                 );
@@ -152,8 +173,9 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                   style={{
                     transform: `translate(-50%, -50%) translate(${position.x}px, ${position.y}px)`,
-                    transition: 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-                    animationDelay: `${index * 100}ms`
+                    transition:
+                      "all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+                    animationDelay: `${index * 100}ms`,
                   }}
                   onMouseEnter={() => setHoveredItem(item.id)}
                   onMouseLeave={() => setHoveredItem(null)}
@@ -163,40 +185,44 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
                     className={`
                       relative w-12 h-12 rounded-full flex items-center justify-center
                       transition-all duration-500 transform
-                      ${isActive 
-                        ? 'bg-gradient-to-r from-ble-400 to-purple-400 text-black scale-125 shadow-lg' 
-                        : 'bg-black/50 backdrop-blur-sm text-white hover:bg-white/20 hover:scale-110'
+                      ${
+                        isActive
+                          ? "bg-gradient-to-r from-ble-400 to-purple-400 text-black scale-125 shadow-lg"
+                          : "bg-black/50 backdrop-blur-sm text-white hover:bg-white/20 hover:scale-110"
                       }
-                      ${isHovered ? 'shadow-2xl' : ''}
+                      ${isHovered ? "shadow-2xl" : ""}
                     `}
                     style={{
-                      boxShadow: isActive || isHovered 
-                        ? `0 0 30px ${item.color}60, 0 0 60px ${item.color}30` 
-                        : 'none',
-                      border: `2px solid ${isActive ? 'white' : 'rgba(255,255,255,0.1)'}`
+                      boxShadow:
+                        isActive || isHovered
+                          ? `0 0 30px ${item.color}60, 0 0 60px ${item.color}30`
+                          : "none",
+                      border: `2px solid ${
+                        isActive ? "white" : "rgba(255,255,255,0.1)"
+                      }`,
                     }}
                   >
-                    <Icon 
+                    <Icon
                       className={`w-5 h-5 transition-all duration-300 ${
-                        isActive ? 'scale-110' : ''
-                      }`} 
+                        isActive ? "scale-110" : ""
+                      }`}
                     />
 
                     {/* Orbital Ring */}
                     {isHovered && (
-                      <div 
+                      <div
                         className="absolute inset-0 rounded-full border-2 animate-spin"
-                        style={{ 
+                        style={{
                           borderColor: `${item.color}80`,
-                          borderTopColor: 'transparent',
-                          animationDuration: '2s'
+                          borderTopColor: "transparent",
+                          animationDuration: "2s",
                         }}
                       />
                     )}
 
                     {/* Pulse Effect */}
                     {isActive && (
-                      <div 
+                      <div
                         className="absolute inset-0 rounded-full animate-ping opacity-40"
                         style={{ backgroundColor: item.color }}
                       />
@@ -210,13 +236,14 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
                       px-2 py-1 bg-black/90 backdrop-blur-sm text-white text-xs font-medium
                       rounded-lg border border-white/20 whitespace-nowrap
                       transition-all duration-300 pointer-events-none
-                      ${isHovered 
-                        ? 'opacity-100 translate-y-0' 
-                        : 'opacity-0 translate-y-2'
+                      ${
+                        isHovered
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-2"
                       }
                     `}
                     style={{
-                      boxShadow: `0 0 15px ${item.color}40`
+                      boxShadow: `0 0 15px ${item.color}40`,
                     }}
                   >
                     {item.label}
@@ -249,11 +276,11 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate, activeSection }) =>
       )}
 
       {/* Page Transition Overlay */}
-      <div 
+      <div
         className={`
           fixed inset-0 bg-gradient-to-r from-purple-400/20 to-blue-400/20 backdrop-blur-sm
           transition-all duration-700 pointer-events-none z-30
-          ${hoveredItem ? 'opacity-100' : 'opacity-0'}
+          ${hoveredItem ? "opacity-100" : "opacity-0"}
         `}
       />
     </>
